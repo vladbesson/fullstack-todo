@@ -28,3 +28,24 @@ repos:
         language: unsupported
         pass_filenames: false
         always_run: true
+
+      - id: frontend-format
+        name: Frontend — formatting
+        entry: pnpm --dir frontend run format
+        language: unsupported
+        pass_filenames: false
+        always_run: true
+
+      - id: frontend-lint
+        name: Frontend — lint
+        entry: pnpm --dir frontend run lint
+        language: unsupported
+        pass_filenames: false
+        always_run: true
+
+      - id: frontend-types
+        name: Frontend — types
+        entry: pnpm --dir frontend run typecheck
+        language: unsupported
+        pass_filenames: false
+        always_run: true
