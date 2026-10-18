@@ -1,6 +1,10 @@
-import { type Task, type TaskCreate } from "@/api/generated/types.gen"
+import type { Task, TaskCreate } from "@/api/generated/types.gen"
 
-const API_URL = "http://127.0.0.1:8000"
+const API_URL = import.meta.env.VITE_API_URL?.replace(/\/+$/, "")
+
+if (!API_URL) {
+  throw new Error("Set VITE_API_URL in the root .env file.")
+}
 
 export const getTasks = async (): Promise<Task[]> => {
   const response = await fetch(`${API_URL}/tasks`)
