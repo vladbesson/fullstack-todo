@@ -75,3 +75,18 @@ async def test_maximum_task_id_returns_not_found(
     )
 
     assert response.status_code == 404
+
+
+@pytest.mark.anyio
+@pytest.mark.parametrize("title", ["", "   ", "a" * 201])
+async def test_invalid_task_title_is_rejected(
+    client: AsyncClient,
+    title: str,
+) -> None:
+    response = await client.post("/tasks", json={"title": title})
+
+    assert response.status_code == 422
+
+    tasks = await client.get("/tasks")
+    assert tasks.status_code == 200
+    assert tasks.json() == []
