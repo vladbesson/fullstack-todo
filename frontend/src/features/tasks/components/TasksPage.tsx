@@ -5,7 +5,7 @@ import { TaskCreateForm } from "./TaskCreateForm"
 import { TaskList } from "./TaskList"
 
 export const TasksPage: FC = () => {
-  const { tasks, error, addTask, setTaskCompleted } = useTasks()
+  const { tasks, error, addTask, setTaskCompleted, removeTask } = useTasks()
 
   return (
     <main className="mx-auto w-full max-w-3xl flex-1 space-y-10 px-5 py-10 sm:px-8 sm:py-20">
@@ -61,7 +61,11 @@ export const TasksPage: FC = () => {
       ) : (
         <div className="space-y-10">
           <TaskCreateForm onCreate={addTask} />
-          <TaskList tasks={tasks} onCompletedChange={setTaskCompleted} />
+          <TaskList
+            tasks={tasks}
+            onCompletedChange={setTaskCompleted}
+            onDelete={removeTask}
+          />
         </div>
       )}
     </main>

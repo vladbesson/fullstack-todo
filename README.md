@@ -12,7 +12,7 @@ A learning project for exploring Python backend development and its integration 
 - Checks: pytest, Ruff, BasedPyright, ESLint, Prettier, TypeScript, pre-commit.
 - TypeScript types generated from OpenAPI using Hey API.
 
-The API supports creating, reading, updating the completion status of, and deleting tasks. The interface currently lists tasks and lets you add new ones. Data is stored in PostgreSQL and persists across backend restarts.
+The API and interface support creating, viewing, completing, reopening, and deleting tasks. Data is stored in PostgreSQL and persists across backend restarts. Task actions show errors and are disabled while a request is in progress.
 
 ## Getting started
 
@@ -83,4 +83,4 @@ uv run --project backend pre-commit install
 
 `pnpm check` applies formatting before running checks, so formatting changes alone do not require a second run. If a hook modifies files during a commit, it stops the commit: review and stage the changes, then retry.
 
-Planned: full CRUD in the interface, a generated API client, and access control.
+Planned: a generated API client and access control.

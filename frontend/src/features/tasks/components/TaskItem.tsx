@@ -5,10 +5,11 @@ import { Button } from "@/components/ui"
 type TaskItemProps = {
   task: Task
   onCompletedChange: (taskId: number, completed: boolean) => Promise<void>
+  onDelete: (taskId: number) => Promise<void>
 }
 
 export const TaskItem: FC<TaskItemProps> = (props) => {
-  const { task, onCompletedChange } = props
+  const { task, onCompletedChange, onDelete } = props
 
   const [isPending, setIsPending] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -28,6 +29,27 @@ export const TaskItem: FC<TaskItemProps> = (props) => {
         error instanceof Error
           ? error.message
           : "Unable to update task. Please try again."
+      )
+    } finally {
+      setIsPending(false)
+    }
+  }
+
+  const onDeleteHandler = async (): Promise<void> => {
+    if (isPending) {
+      return
+    }
+
+    setIsPending(true)
+    setError(null)
+
+    try {
+      await onDelete(task.id)
+    } catch (error) {
+      setError(
+        error instanceof Error
+          ? error.message
+          : "Unable to delete task. Please try again."
       )
     } finally {
       setIsPending(false)
@@ -86,6 +108,16 @@ export const TaskItem: FC<TaskItemProps> = (props) => {
           </p>
         ) : null}
       </div>
+
+      <Button
+        type="button"
+        variant="ghost"
+        disabled={isPending}
+        onClick={onDeleteHandler}
+        aria-label={`Delete "${task.title}"`}
+      >
+        Delete
+      </Button>
     </li>
   )
 }

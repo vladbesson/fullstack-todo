@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 import { type Task, type TaskCreate } from "@/api/generated/types.gen"
-import { getTasks, createTask, updateTask } from "./api"
+import { getTasks, createTask, updateTask, deleteTask } from "./api"
 
 export const useTasks = () => {
   const [tasks, setTasks] = useState<Task[] | null>(null)
@@ -53,10 +53,19 @@ export const useTasks = () => {
     )
   }
 
+  const removeTask = async (taskId: number): Promise<void> => {
+    await deleteTask(taskId)
+
+    setTasks((current) =>
+      current === null ? null : current.filter((task) => task.id !== taskId)
+    )
+  }
+
   return {
     tasks,
     error,
     addTask,
     setTaskCompleted,
+    removeTask,
   }
 }

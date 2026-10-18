@@ -50,3 +50,13 @@ export const updateTask = async (
 
   return response.json()
 }
+
+export const deleteTask = async (taskId: number): Promise<void> => {
+  const response = await fetch(`${API_URL}/tasks/${taskId}`, {
+    method: "DELETE",
+  })
+
+  if (!response.ok) {
+    throw new Error(`Unable to delete task (HTTP ${response.status}).`)
+  }
+}

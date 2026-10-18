@@ -5,10 +5,11 @@ import { TaskItem } from "./TaskItem"
 type TaskListProps = {
   tasks: Task[]
   onCompletedChange: (taskId: number, completed: boolean) => Promise<void>
+  onDelete: (taskId: number) => Promise<void>
 }
 
 export const TaskList: FC<TaskListProps> = (props) => {
-  const { tasks, onCompletedChange } = props
+  const { tasks, onCompletedChange, onDelete } = props
 
   const completedCount = tasks.filter((task) => task.completed).length
   const openCount = tasks.length - completedCount
@@ -38,6 +39,7 @@ export const TaskList: FC<TaskListProps> = (props) => {
               key={task.id}
               task={task}
               onCompletedChange={onCompletedChange}
+              onDelete={onDelete}
             />
           ))}
         </ul>
