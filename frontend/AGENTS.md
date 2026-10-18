@@ -10,8 +10,8 @@
 - Prefer named exports for authored components, hooks, and utilities. Retain default exports where a tool requires them, such as Vite configuration. When replacing an existing component default export, update its consumers.
 
 ```tsx
-import { type FC } from "react"
-import { type Task } from "@/api/generated/types.gen"
+import type { FC } from "react"
+import type { Task } from "@/api/generated/types.gen"
 
 type TaskTitleProps = {
   task: Task
@@ -26,7 +26,7 @@ export const TaskTitle: FC<TaskTitleProps> = (props) => {
 
 ## TypeScript and imports
 
-- Prefer `type` over `interface`; mark type-only imports with inline `type` specifiers.
+- Prefer `type` over `interface`. When an import contains only types, use one `import type { ... }` declaration. Inline `type` specifiers are allowed when importing types together with runtime values from the same module.
 - Use React imports first, then other external dependencies, project aliases, and local imports. Use `@/` for imports across feature boundaries; use relative imports within a feature when clearer.
 - Import shared UI through `@/components/ui`. Within `components/ui`, keep direct sibling imports to avoid cycles through the barrel.
 - Keep `index.ts` files limited to re-exports. Add barrels at useful public boundaries instead of creating one for every directory.
