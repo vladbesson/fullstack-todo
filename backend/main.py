@@ -1,6 +1,8 @@
+from typing import Annotated
+
 from fastapi import FastAPI, HTTPException, Response
 from fastapi.middleware.cors import CORSMiddleware
-from pydantic import BaseModel
+from pydantic import BaseModel, StringConstraints
 
 
 class Task(BaseModel):
@@ -10,7 +12,14 @@ class Task(BaseModel):
 
 
 class TaskCreate(BaseModel):
-    title: str
+    title: Annotated[
+        str,
+        StringConstraints(
+            strip_whitespace=True,
+            min_length=1,
+            max_length=200,
+        ),
+    ]
 
 
 class TaskUpdate(BaseModel):
@@ -31,7 +40,7 @@ next_task_id = 2
 tasks = [
     {
         "id": 1,
-        "title": "Изучить FastAPI",
+        "title": "Learn FastAPI",
         "completed": False,
     }
 ]

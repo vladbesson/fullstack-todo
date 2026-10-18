@@ -1,0 +1,18 @@
+{
+  "name": "fullstack-todo",
+  "private": true,
+  "scripts": {
+    "dev:backend": "uv run --directory backend fastapi dev main.py",
+    "dev:frontend": "pnpm --dir frontend dev",
+    "check": "uv run --project backend --locked pre-commit run --all-files",
+    "build": "pnpm --dir frontend build",
+    "test:backend": "uv run --directory backend --locked python -m pytest -q",
+    "lint:backend": "uv run --directory backend --locked ruff check .",
+    "lint:frontend": "pnpm --dir frontend lint",
+    "typecheck:backend": "uv run --directory backend --locked basedpyright",
+    "typecheck:frontend": "pnpm --dir frontend typecheck",
+    "format:backend": "uv run --directory backend --locked ruff format .",
+    "format:frontend": "pnpm --dir frontend format",
+    "generate:api": "pnpm --dir frontend generate:api"
+  }
+}
