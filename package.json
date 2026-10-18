@@ -4,7 +4,7 @@
   "scripts": {
     "dev:backend": "uv run --directory backend fastapi dev main.py",
     "dev:frontend": "pnpm --dir frontend dev",
-    "check": "uv run --project backend --locked pre-commit run --all-files",
+    "check": "pnpm format:backend && pnpm format:frontend && uv run --project backend --locked pre-commit run --all-files && pnpm build",
     "build": "pnpm --dir frontend build",
     "test:backend": "uv run --directory backend --locked python -m pytest -q",
     "lint:backend": "uv run --directory backend --locked ruff check .",

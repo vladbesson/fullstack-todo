@@ -23,7 +23,7 @@ Run these commands from the repository root. The root `package.json` is the sour
 | Command | When to use |
 | --- | --- |
 | `pnpm dev:backend` / `pnpm dev:frontend` | Start each development server in its own terminal. |
-| `pnpm check` | Run all configured pre-commit checks across both parts of the project before a checkpoint commit or when full verification is requested. |
+| `pnpm check` | Format both parts, run all configured pre-commit checks, and build the frontend. Use this single command when asking the user to verify a completed task or prepare a checkpoint commit. |
 | `pnpm build` | Verify the frontend production build after UI, import, or build-configuration changes. |
 | `pnpm test:backend` | Run the existing API tests after backend behavior changes. |
 | `pnpm lint:backend` / `pnpm lint:frontend` | Check lint rules for the affected part. |
@@ -31,7 +31,7 @@ Run these commands from the repository root. The root `package.json` is the sour
 | `pnpm format:backend` / `pnpm format:frontend` | Apply the configured formatting to the affected part. |
 | `pnpm generate:api` | Regenerate frontend API artifacts after contract changes; the backend must be running. |
 
-`pnpm check` includes formatters that modify files. A run may stop because files were formatted; review the changes and rerun the command. Agents should explain this behavior and leave staging and committing to the user unless explicitly requested.
+`pnpm check` applies formatting before running the hooks, so formatting changes alone do not require a second run. Review the resulting changes. A Git commit can still stop if its hooks modify files; review those changes and retry. Leave staging and committing to the user unless explicitly requested.
 
 ## Git preferences
 
