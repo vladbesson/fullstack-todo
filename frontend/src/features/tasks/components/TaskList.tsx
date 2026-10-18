@@ -4,10 +4,11 @@ import { TaskItem } from "./TaskItem"
 
 type TaskListProps = {
   tasks: Task[]
+  onCompletedChange: (taskId: number, completed: boolean) => Promise<void>
 }
 
 export const TaskList: FC<TaskListProps> = (props) => {
-  const { tasks } = props
+  const { tasks, onCompletedChange } = props
 
   const completedCount = tasks.filter((task) => task.completed).length
   const openCount = tasks.length - completedCount
@@ -33,7 +34,11 @@ export const TaskList: FC<TaskListProps> = (props) => {
       ) : (
         <ul className="divide-y overflow-hidden rounded-xl border bg-card">
           {tasks.map((task) => (
-            <TaskItem key={task.id} task={task} />
+            <TaskItem
+              key={task.id}
+              task={task}
+              onCompletedChange={onCompletedChange}
+            />
           ))}
         </ul>
       )}
