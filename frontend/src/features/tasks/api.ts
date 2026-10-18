@@ -1,4 +1,4 @@
-import type { Task, TaskCreate } from "@/api/generated/types.gen"
+import type { Task, TaskCreate, TaskUpdate } from "@/api/generated/types.gen"
 
 const API_URL = import.meta.env.VITE_API_URL?.replace(/\/+$/, "")
 
@@ -27,6 +27,25 @@ export const createTask = async (payload: TaskCreate): Promise<Task> => {
 
   if (!response.ok) {
     throw new Error(`Unable to add task (HTTP ${response.status}).`)
+  }
+
+  return response.json()
+}
+
+export const updateTask = async (
+  taskId: number,
+  payload: TaskUpdate
+): Promise<Task> => {
+  const response = await fetch(`${API_URL}/tasks/${taskId}`, {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(payload),
+  })
+
+  if (!response.ok) {
+    throw new Error(`Unable to update task (HTTP ${response.status}).`)
   }
 
   return response.json()
