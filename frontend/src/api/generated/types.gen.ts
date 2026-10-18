@@ -80,20 +80,6 @@ export type ValidationError = {
     };
 };
 
-export type RootGetData = {
-    body?: never;
-    path?: never;
-    query?: never;
-    url: '/';
-};
-
-export type RootGetResponses = {
-    /**
-     * Successful Response
-     */
-    200: unknown;
-};
-
 export type GetTasksTasksGetData = {
     body?: never;
     path?: never;
@@ -226,3 +212,17 @@ export type UpdateTaskTasksTaskIdPatchResponses = {
 };
 
 export type UpdateTaskTasksTaskIdPatchResponse = UpdateTaskTasksTaskIdPatchResponses[keyof UpdateTaskTasksTaskIdPatchResponses];
+
+export type RootGetData = {
+    body?: never;
+    path?: never;
+    query?: never;
+    url: '/';
+};
+
+export type RootGetResponses = {
+    /**
+     * Successful Response
+     */
+    200: unknown;
+};

@@ -10,7 +10,7 @@
 - База данных: PostgreSQL в Docker Compose.
 - Frontend: React, TypeScript, Vite, Tailwind CSS, shadcn/ui, pnpm.
 - Проверки: pytest, Ruff, BasedPyright, ESLint, Prettier, TypeScript, pre-commit.
-- Генерация TypeScript-типов из OpenAPI через Hey API.
+- Генерация TypeScript-типов и API-клиента на основе Fetch из OpenAPI через Hey API.
 
 API и интерфейс поддерживают создание, просмотр, завершение, возврат к выполнению и удаление задач. Данные хранятся в PostgreSQL и сохраняются после перезапуска backend. Для действий с задачами отображаются ошибки, а кнопки блокируются на время запроса.
 
@@ -49,7 +49,7 @@ pnpm dev:frontend
 
 Frontend: http://localhost:5173. Документация API: http://127.0.0.1:8000/docs.
 
-После изменения API обновить типы при запущенном backend:
+После изменения API обновите типы и API-клиент при запущенном backend:
 
 ```bash
 pnpm generate:api
@@ -83,4 +83,4 @@ uv run --project backend pre-commit install
 
 `pnpm check` применяет форматирование до проверок, поэтому изменения форматирования сами по себе не требуют повторного запуска. Если форматирование изменилось при коммите, Git-хук остановит коммит: просмотрите изменения и повторите его.
 
-В планах: сгенерированный API-клиент и права доступа.
+В планах: права доступа.

@@ -1,4 +1,11 @@
 import type { Task, TaskCreate, TaskUpdate } from "@/api/generated/types.gen"
+import { client } from "@/api/generated/client.gen"
+import {
+  createTaskTasksPost,
+  deleteTaskTasksTaskIdDelete,
+  getTasksTasksGet,
+  updateTaskTasksTaskIdPatch,
+} from "@/api/generated/sdk.gen"
 
 const API_URL = import.meta.env.VITE_API_URL?.replace(/\/+$/, "")
 
@@ -6,57 +13,43 @@ if (!API_URL) {
   throw new Error("Set VITE_API_URL in the root .env file.")
 }
 
+client.setConfig({
+  baseUrl: API_URL,
+})
+
 export const getTasks = async (): Promise<Task[]> => {
-  const response = await fetch(`${API_URL}/tasks`)
+  const { data } = await getTasksTasksGet({
+    throwOnError: true,
+  })
 
-  if (!response.ok) {
-    throw new Error(`Unable to load tasks (HTTP ${response.status}).`)
-  }
-
-  return response.json()
+  return data
 }
 
 export const createTask = async (payload: TaskCreate): Promise<Task> => {
-  const response = await fetch(`${API_URL}/tasks`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(payload),
+  const { data } = await createTaskTasksPost({
+    body: payload,
+    throwOnError: true,
   })
 
-  if (!response.ok) {
-    throw new Error(`Unable to add task (HTTP ${response.status}).`)
-  }
-
-  return response.json()
+  return data
 }
 
 export const updateTask = async (
   taskId: number,
   payload: TaskUpdate
 ): Promise<Task> => {
-  const response = await fetch(`${API_URL}/tasks/${taskId}`, {
-    method: "PATCH",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(payload),
+  const { data } = await updateTaskTasksTaskIdPatch({
+    path: { task_id: taskId },
+    body: payload,
+    throwOnError: true,
   })
 
-  if (!response.ok) {
-    throw new Error(`Unable to update task (HTTP ${response.status}).`)
-  }
-
-  return response.json()
+  return data
 }
 
 export const deleteTask = async (taskId: number): Promise<void> => {
-  const response = await fetch(`${API_URL}/tasks/${taskId}`, {
-    method: "DELETE",
+  await deleteTaskTasksTaskIdDelete({
+    path: { task_id: taskId },
+    throwOnError: true,
   })
-
-  if (!response.ok) {
-    throw new Error(`Unable to delete task (HTTP ${response.status}).`)
-  }
 }

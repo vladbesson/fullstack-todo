@@ -15,5 +15,5 @@ if (!env.VITE_API_URL) {
 export default defineConfig({
   input: `${env.VITE_API_URL.replace(/\/+$/, "")}/openapi.json`,
   output: "src/api/generated",
-  plugins: ["@hey-api/typescript"],
+  plugins: ["@hey-api/typescript", "@hey-api/sdk", "@hey-api/client-fetch"],
 })

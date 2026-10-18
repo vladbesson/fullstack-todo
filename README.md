@@ -10,7 +10,7 @@ A learning project for exploring Python backend development and its integration 
 - Database: PostgreSQL with Docker Compose.
 - Frontend: React, TypeScript, Vite, Tailwind CSS, shadcn/ui, pnpm.
 - Checks: pytest, Ruff, BasedPyright, ESLint, Prettier, TypeScript, pre-commit.
-- TypeScript types generated from OpenAPI using Hey API.
+- TypeScript types and a Fetch-based API client generated from OpenAPI using Hey API.
 
 The API and interface support creating, viewing, completing, reopening, and deleting tasks. Data is stored in PostgreSQL and persists across backend restarts. Task actions show errors and are disabled while a request is in progress.
 
@@ -49,7 +49,7 @@ pnpm dev:frontend
 
 Frontend: http://localhost:5173. API documentation: http://127.0.0.1:8000/docs.
 
-After changing the API, regenerate the types while the backend is running:
+After changing the API, regenerate the types and API client while the backend is running:
 
 ```bash
 pnpm generate:api
@@ -83,4 +83,4 @@ uv run --project backend pre-commit install
 
 `pnpm check` applies formatting before running checks, so formatting changes alone do not require a second run. If a hook modifies files during a commit, it stops the commit: review and stage the changes, then retry.
 
-Planned: a generated API client and access control.
+Planned: access control.
