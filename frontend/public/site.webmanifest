@@ -1,0 +1,15 @@
+{
+  "name": "Fullstack TODO",
+  "short_name": "TODO",
+  "description": "Keep your next steps in one place.",
+  "lang": "en",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "theme_color": "#171717",
+  "background_color": "#fafafa",
+  "icons": [
+    { "src": "/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "/icon-512.png", "sizes": "512x512", "type": "image/png" }
+  ]
+}

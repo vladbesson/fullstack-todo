@@ -1,21 +1,7 @@
-# React + TypeScript + Vite + shadcn/ui
+# Fullstack TODO frontend
 
-This is a template for a new Vite project with React, TypeScript, and shadcn/ui.
+The React and TypeScript interface for Fullstack TODO, built with Vite, Tailwind CSS, and shadcn/ui.
 
-## Adding components
+Setup and verification commands are documented in the [project README](../README.md).
 
-To add components to your app, run the following command:
-
-```bash
-npx shadcn@latest add button
-```
-
-This will place the ui components in the `src/components` directory.
-
-## Using components
-
-To use the components in your app, import them as follows:
-
-```tsx
-import { Button } from "@/components/ui/button"
-```
+Task components, state, and API calls live in `src/features/tasks`. Shared UI components live in `src/components/ui`; API types in `src/api/generated` are generated from FastAPI's OpenAPI schema.
