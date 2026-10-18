@@ -1,32 +1,34 @@
 # Fullstack TODO
 
-Учебное приложение для изучения Python backend и его взаимодействия с React.
+[Русский](README.ru.md)
 
-## Стек
+A learning project for exploring Python backend development and its integration with React.
+
+## Stack
 
 - Backend: Python, FastAPI, Pydantic, SQLAlchemy, asyncpg, Alembic, uv.
-- База данных: PostgreSQL в Docker Compose.
+- Database: PostgreSQL with Docker Compose.
 - Frontend: React, TypeScript, Vite, Tailwind CSS, shadcn/ui, pnpm.
-- Проверки: pytest, Ruff, BasedPyright, ESLint, Prettier, TypeScript, pre-commit.
-- Генерация TypeScript-типов из OpenAPI через Hey API.
+- Checks: pytest, Ruff, BasedPyright, ESLint, Prettier, TypeScript, pre-commit.
+- TypeScript types generated from OpenAPI using Hey API.
 
-API поддерживает создание, получение, изменение статуса и удаление задач. Интерфейс отображает список и позволяет добавлять задачи. Данные хранятся в PostgreSQL и сохраняются после перезапуска backend.
+The API supports creating, reading, updating the completion status of, and deleting tasks. The interface currently lists tasks and lets you add new ones. Data is stored in PostgreSQL and persists across backend restarts.
 
-## Запуск
+## Getting started
 
-Нужны Python, uv, Node.js, pnpm и запущенный Docker с Docker Compose. Все команды выполняются из корня проекта.
+You need Python, uv, Node.js, pnpm, and a running Docker engine with Docker Compose. Run all commands from the repository root.
 
-Перед первым запуском скопируйте образец настроек:
+Before the first run, copy the example configuration:
 
 ```bash
 cp .env.example .env
 ```
 
-В `.env` замените `POSTGRES_PASSWORD=change_me` своим паролем для локальной базы. Docker создаст пользователя и базу из `POSTGRES_USER` и `POSTGRES_DB` при первом запуске с пустым томом. Смена пароля в `.env` после этого не меняет пароль существующего пользователя PostgreSQL.
+In `.env`, replace `POSTGRES_PASSWORD=change_me` with a password of your choice for the local database. On the first run with an empty volume, Docker initializes PostgreSQL with the user and database specified by `POSTGRES_USER` and `POSTGRES_DB`. Changing the password in `.env` afterward does not change the existing PostgreSQL user's password.
 
-В этом же файле задаются адрес API (`VITE_API_URL`) и разрешённые адреса фронтенда для CORS (`BACKEND_CORS_ORIGINS`, JSON-массив). После изменения настроек перезапустите серверы разработки.
+The same file defines the API URL (`VITE_API_URL`) and allowed frontend origins for CORS (`BACKEND_CORS_ORIGINS`, a JSON array). Restart the development servers after changing these settings.
 
-Установите зависимости, запустите базу и примените миграции:
+Install dependencies, start the database, and apply migrations:
 
 ```bash
 uv sync --project backend --locked
@@ -35,7 +37,7 @@ docker compose up -d --wait db
 uv run --directory backend alembic upgrade head
 ```
 
-Запустите backend и frontend в двух отдельных терминалах:
+Start the backend and frontend in two separate terminals:
 
 ```bash
 pnpm dev:backend
@@ -45,40 +47,40 @@ pnpm dev:backend
 pnpm dev:frontend
 ```
 
-Frontend: http://localhost:5173. Документация API: http://127.0.0.1:8000/docs.
+Frontend: http://localhost:5173. API documentation: http://127.0.0.1:8000/docs.
 
-После изменения API обновить типы при запущенном backend:
+After changing the API, regenerate the types while the backend is running:
 
 ```bash
 pnpm generate:api
 ```
 
-## Проверки
+## Checks
 
-Тесты используют отдельную базу `todo_test` в том же PostgreSQL. Создайте её один раз после запуска `db`:
+Tests use a separate `todo_test` database in the same PostgreSQL instance. Create it once after starting `db`:
 
 ```bash
 docker compose exec -T db sh -c 'psql -U "$POSTGRES_USER" -d "$POSTGRES_DB" -c "CREATE DATABASE todo_test;"'
 ```
 
-Примените к ней миграции; повторяйте эту команду после добавления новых миграций:
+Apply its migrations. Repeat this command whenever new migrations are added:
 
 ```bash
 POSTGRES_DB=todo_test uv run --directory backend alembic upgrade head
 ```
 
-Для полной проверки достаточно одной команды. Она сначала форматирует backend и frontend, затем запускает линтеры, проверку типов, API-тесты и сборку frontend. Для тестов нужны запущенная база и применённые миграции:
+Run all checks with one command. It formats the backend and frontend, then runs linters, type checks, API tests, and the frontend production build. Tests require a running database with migrations applied:
 
 ```bash
 pnpm check
 ```
 
-Чтобы проверки запускались при коммите, установите Git-хук:
+To run checks when committing, install the Git hook:
 
 ```bash
 uv run --project backend pre-commit install
 ```
 
-`pnpm check` применяет форматирование до проверок, поэтому изменения форматирования сами по себе не требуют повторного запуска. Если форматирование изменилось при коммите, Git-хук остановит коммит: просмотрите изменения и повторите его.
+`pnpm check` applies formatting before running checks, so formatting changes alone do not require a second run. If a hook modifies files during a commit, it stops the commit: review and stage the changes, then retry.
 
-В планах: полный CRUD в интерфейсе, сгенерированный API-клиент и права доступа.
+Planned: full CRUD in the interface, a generated API client, and access control.
