@@ -1,5 +1,5 @@
 import type { Task, TaskCreate, TaskUpdate } from "@/api/generated/types.gen"
-import { client } from "@/api/generated/client.gen"
+import { client } from "@/api/client"
 import {
   createTaskTasksPost,
   deleteTaskTasksTaskIdDelete,
@@ -7,18 +7,9 @@ import {
   updateTaskTasksTaskIdPatch,
 } from "@/api/generated/sdk.gen"
 
-const API_URL = import.meta.env.VITE_API_URL?.replace(/\/+$/, "")
-
-if (!API_URL) {
-  throw new Error("Set VITE_API_URL in the root .env file.")
-}
-
-client.setConfig({
-  baseUrl: API_URL,
-})
-
 export const getTasks = async (): Promise<Task[]> => {
   const { data } = await getTasksTasksGet({
+    client,
     throwOnError: true,
   })
 
@@ -27,6 +18,7 @@ export const getTasks = async (): Promise<Task[]> => {
 
 export const createTask = async (payload: TaskCreate): Promise<Task> => {
   const { data } = await createTaskTasksPost({
+    client,
     body: payload,
     throwOnError: true,
   })
@@ -39,6 +31,7 @@ export const updateTask = async (
   payload: TaskUpdate
 ): Promise<Task> => {
   const { data } = await updateTaskTasksTaskIdPatch({
+    client,
     path: { task_id: taskId },
     body: payload,
     throwOnError: true,
@@ -49,6 +42,7 @@ export const updateTask = async (
 
 export const deleteTask = async (taskId: number): Promise<void> => {
   await deleteTaskTasksTaskIdDelete({
+    client,
     path: { task_id: taskId },
     throwOnError: true,
   })

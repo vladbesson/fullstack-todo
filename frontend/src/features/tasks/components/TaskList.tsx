@@ -1,15 +1,19 @@
 import { type FC } from "react"
-import { type Task } from "@/api/generated/types.gen"
+import type { Project, Task } from "@/api/generated/types.gen"
 import { TaskItem } from "./TaskItem"
 
 type TaskListProps = {
   tasks: Task[]
+  projects: Project[] | null
   onCompletedChange: (taskId: number, completed: boolean) => Promise<void>
   onDelete: (taskId: number) => Promise<void>
 }
 
 export const TaskList: FC<TaskListProps> = (props) => {
-  const { tasks, onCompletedChange, onDelete } = props
+  const { tasks, projects, onCompletedChange, onDelete } = props
+  const projectNames = new Map(
+    (projects ?? []).map((project) => [project.id, project.name])
+  )
 
   const completedCount = tasks.filter((task) => task.completed).length
   const openCount = tasks.length - completedCount
@@ -38,6 +42,12 @@ export const TaskList: FC<TaskListProps> = (props) => {
             <TaskItem
               key={task.id}
               task={task}
+              projectName={
+                task.project_id === null
+                  ? null
+                  : (projectNames.get(task.project_id) ??
+                    `Project #${task.project_id}`)
+              }
               onCompletedChange={onCompletedChange}
               onDelete={onDelete}
             />

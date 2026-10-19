@@ -1,15 +1,18 @@
 import { type FC, useState } from "react"
+import { HugeiconsIcon } from "@hugeicons/react"
+import { Folder01Icon } from "@hugeicons/core-free-icons"
 import { type Task } from "@/api/generated/types.gen"
 import { Button } from "@/components/ui"
 
 type TaskItemProps = {
   task: Task
+  projectName: string | null
   onCompletedChange: (taskId: number, completed: boolean) => Promise<void>
   onDelete: (taskId: number) => Promise<void>
 }
 
 export const TaskItem: FC<TaskItemProps> = (props) => {
-  const { task, onCompletedChange, onDelete } = props
+  const { task, projectName, onCompletedChange, onDelete } = props
 
   const [isPending, setIsPending] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -101,6 +104,18 @@ export const TaskItem: FC<TaskItemProps> = (props) => {
         >
           {task.title}
         </p>
+
+        {projectName !== null ? (
+          <p className="mt-1 flex items-start gap-1.5 text-xs leading-5 text-muted-foreground">
+            <HugeiconsIcon
+              icon={Folder01Icon}
+              size={14}
+              strokeWidth={1.5}
+              className="mt-0.5 shrink-0"
+            />
+            <span>{projectName}</span>
+          </p>
+        ) : null}
 
         {error !== null ? (
           <p role="alert" className="mt-1 text-xs text-destructive">

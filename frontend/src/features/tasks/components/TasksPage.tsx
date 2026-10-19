@@ -1,11 +1,13 @@
 import type { FC } from "react"
 import { Alert, AlertDescription, AlertTitle, Skeleton } from "@/components/ui"
+import { useProjects } from "@/features/projects/useProjects"
 import { useTasks } from "../useTasks"
 import { TaskCreateForm } from "./TaskCreateForm"
 import { TaskList } from "./TaskList"
 
 export const TasksPage: FC = () => {
   const { tasks, error, addTask, setTaskCompleted, removeTask } = useTasks()
+  const { projects, error: projectsError, retry } = useProjects()
 
   return (
     <main className="mx-auto w-full max-w-3xl flex-1 space-y-10 px-5 py-10 sm:px-8 sm:py-20">
@@ -60,9 +62,15 @@ export const TasksPage: FC = () => {
         </section>
       ) : (
         <div className="space-y-10">
-          <TaskCreateForm onCreate={addTask} />
+          <TaskCreateForm
+            onCreate={addTask}
+            projects={projects}
+            projectsError={projectsError}
+            onRetryProjects={retry}
+          />
           <TaskList
             tasks={tasks}
+            projects={projects}
             onCompletedChange={setTaskCompleted}
             onDelete={removeTask}
           />
