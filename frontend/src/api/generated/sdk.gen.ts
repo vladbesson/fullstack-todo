@@ -2,7 +2,7 @@
 
 import type { Client, ClientMeta, Options as Options2, RequestResult, TDataShape } from './client';
 import { client } from './client.gen';
-import type { CreateTaskTasksPostData, CreateTaskTasksPostErrors, CreateTaskTasksPostResponses, DeleteTaskTasksTaskIdDeleteData, DeleteTaskTasksTaskIdDeleteErrors, DeleteTaskTasksTaskIdDeleteResponses, GetTasksTasksGetData, GetTasksTasksGetResponses, GetTaskTasksTaskIdGetData, GetTaskTasksTaskIdGetErrors, GetTaskTasksTaskIdGetResponses, RootGetData, RootGetResponses, UpdateTaskTasksTaskIdPatchData, UpdateTaskTasksTaskIdPatchErrors, UpdateTaskTasksTaskIdPatchResponses } from './types.gen';
+import type { CreateProjectProjectsPostData, CreateProjectProjectsPostErrors, CreateProjectProjectsPostResponses, CreateTaskTasksPostData, CreateTaskTasksPostErrors, CreateTaskTasksPostResponses, DeleteTaskTasksTaskIdDeleteData, DeleteTaskTasksTaskIdDeleteErrors, DeleteTaskTasksTaskIdDeleteResponses, GetProjectsProjectsGetData, GetProjectsProjectsGetResponses, GetTasksTasksGetData, GetTasksTasksGetResponses, GetTaskTasksTaskIdGetData, GetTaskTasksTaskIdGetErrors, GetTaskTasksTaskIdGetResponses, RootGetData, RootGetResponses, UpdateTaskTasksTaskIdPatchData, UpdateTaskTasksTaskIdPatchErrors, UpdateTaskTasksTaskIdPatchResponses } from './types.gen';
 
 export type Options<TData extends TDataShape = TDataShape, ThrowOnError extends boolean = boolean, TResponse = unknown> = Options2<TData, ThrowOnError, TResponse> & {
     /**
@@ -50,6 +50,23 @@ export const getTaskTasksTaskIdGet = <ThrowOnError extends boolean = false>(opti
  */
 export const updateTaskTasksTaskIdPatch = <ThrowOnError extends boolean = false>(options: Options<UpdateTaskTasksTaskIdPatchData, ThrowOnError>): RequestResult<UpdateTaskTasksTaskIdPatchResponses, UpdateTaskTasksTaskIdPatchErrors, ThrowOnError> => (options.client ?? client).patch<UpdateTaskTasksTaskIdPatchResponses, UpdateTaskTasksTaskIdPatchErrors, ThrowOnError>({
     url: '/tasks/{task_id}',
+    ...options,
+    headers: {
+        'Content-Type': 'application/json',
+        ...options.headers
+    }
+});
+
+/**
+ * Get Projects
+ */
+export const getProjectsProjectsGet = <ThrowOnError extends boolean = false>(options?: Options<GetProjectsProjectsGetData, ThrowOnError>): RequestResult<GetProjectsProjectsGetResponses, unknown, ThrowOnError> => (options?.client ?? client).get<GetProjectsProjectsGetResponses, unknown, ThrowOnError>({ url: '/projects', ...options });
+
+/**
+ * Create Project
+ */
+export const createProjectProjectsPost = <ThrowOnError extends boolean = false>(options: Options<CreateProjectProjectsPostData, ThrowOnError>): RequestResult<CreateProjectProjectsPostResponses, CreateProjectProjectsPostErrors, ThrowOnError> => (options.client ?? client).post<CreateProjectProjectsPostResponses, CreateProjectProjectsPostErrors, ThrowOnError>({
+    url: '/projects',
     ...options,
     headers: {
         'Content-Type': 'application/json',

@@ -90,3 +90,80 @@ async def test_invalid_task_title_is_rejected(
     tasks = await client.get("/tasks")
     assert tasks.status_code == 200
     assert tasks.json() == []
+
+
+@pytest.mark.anyio
+async def test_task_project_is_saved(client: AsyncClient) -> None:
+    project = await client.post("/projects", json={"name": "Backend learning"})
+    assert project.status_code == 201
+    project_id = project.json()["id"]
+
+    created = await client.post(
+        "/tasks",
+        json={"title": "Learn relationships", "project_id": project_id},
+    )
+
+    assert created.status_code == 201
+    assert created.json()["project_id"] == project_id
+
+    fetched = await client.get(f"/tasks/{created.json()['id']}")
+    assert fetched.status_code == 200
+    assert fetched.json() == created.json()
+
+    tasks = await client.get("/tasks")
+    assert tasks.status_code == 200
+    assert tasks.json() == [created.json()]
+
+
+@pytest.mark.anyio
+@pytest.mark.parametrize("include_project_id", [False, True])
+async def test_task_can_be_created_without_project(
+    client: AsyncClient,
+    include_project_id: bool,
+) -> None:
+    payload: dict[str, str | None] = {"title": "Unassigned task"}
+    if include_project_id:
+        payload["project_id"] = None
+
+    created = await client.post("/tasks", json=payload)
+
+    assert created.status_code == 201
+    assert created.json()["project_id"] is None
+
+    fetched = await client.get(f"/tasks/{created.json()['id']}")
+    assert fetched.status_code == 200
+    assert fetched.json()["project_id"] is None
+
+
+@pytest.mark.anyio
+async def test_task_with_missing_project_is_rejected(client: AsyncClient) -> None:
+    response = await client.post(
+        "/tasks",
+        json={"title": "Invalid project", "project_id": 9_223_372_036_854_775_807},
+    )
+
+    assert response.status_code == 422
+    assert response.json() == {"detail": "Project not found"}
+
+    tasks = await client.get("/tasks")
+    assert tasks.status_code == 200
+    assert tasks.json() == []
+
+
+@pytest.mark.anyio
+@pytest.mark.parametrize("project_id", [-(2**63) - 1, -1, 0, 2**63])
+async def test_invalid_task_project_id_is_rejected(
+    client: AsyncClient,
+    project_id: int,
+) -> None:
+    response = await client.post(
+        "/tasks",
+        json={"title": "Invalid project ID", "project_id": project_id},
+    )
+
+    assert response.status_code == 422
+    assert response.json()["detail"][0]["loc"] == ["body", "project_id"]
+
+    tasks = await client.get("/tasks")
+    assert tasks.status_code == 200
+    assert tasks.json() == []

@@ -1,14 +1,13 @@
 from typing import Annotated
 
-from fastapi import APIRouter, Depends, HTTPException, Path, Response
+from fastapi import APIRouter, HTTPException, Path, Response
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from db import get_session
-from models import TaskModel
+from dependencies import SessionDep
+from models import ProjectModel, TaskModel
 from schemas import Task, TaskCreate, TaskUpdate
 
-SessionDep = Annotated[AsyncSession, Depends(get_session)]
 TaskId = Annotated[int, Path(ge=1, le=9_223_372_036_854_775_807)]
 
 router = APIRouter(prefix="/tasks", tags=["tasks"])
@@ -33,7 +32,12 @@ async def get_tasks(session: SessionDep) -> list[TaskModel]:
 
 @router.post("", status_code=201, response_model=Task)
 async def create_task(task: TaskCreate, session: SessionDep) -> TaskModel:
-    new_task = TaskModel(title=task.title)
+    if task.project_id is not None:
+        project = await session.get(ProjectModel, task.project_id)
+        if project is None:
+            raise HTTPException(status_code=422, detail="Project not found")
+
+    new_task = TaskModel(title=task.title, project_id=task.project_id)
     session.add(new_task)
     await session.commit()
     await session.refresh(new_task)

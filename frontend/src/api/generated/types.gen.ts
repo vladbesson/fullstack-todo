@@ -15,6 +15,30 @@ export type HttpValidationError = {
 };
 
 /**
+ * Project
+ */
+export type Project = {
+    /**
+     * Id
+     */
+    id: number;
+    /**
+     * Name
+     */
+    name: string;
+};
+
+/**
+ * ProjectCreate
+ */
+export type ProjectCreate = {
+    /**
+     * Name
+     */
+    name: string;
+};
+
+/**
  * Task
  */
 export type Task = {
@@ -30,12 +54,20 @@ export type Task = {
      * Completed
      */
     completed: boolean;
+    /**
+     * Project Id
+     */
+    project_id: number | null;
 };
 
 /**
  * TaskCreate
  */
 export type TaskCreate = {
+    /**
+     * Project Id
+     */
+    project_id?: number | null;
     /**
      * Title
      */
@@ -212,6 +244,49 @@ export type UpdateTaskTasksTaskIdPatchResponses = {
 };
 
 export type UpdateTaskTasksTaskIdPatchResponse = UpdateTaskTasksTaskIdPatchResponses[keyof UpdateTaskTasksTaskIdPatchResponses];
+
+export type GetProjectsProjectsGetData = {
+    body?: never;
+    path?: never;
+    query?: never;
+    url: '/projects';
+};
+
+export type GetProjectsProjectsGetResponses = {
+    /**
+     * Response Get Projects Projects Get
+     *
+     * Successful Response
+     */
+    200: Array<Project>;
+};
+
+export type GetProjectsProjectsGetResponse = GetProjectsProjectsGetResponses[keyof GetProjectsProjectsGetResponses];
+
+export type CreateProjectProjectsPostData = {
+    body: ProjectCreate;
+    path?: never;
+    query?: never;
+    url: '/projects';
+};
+
+export type CreateProjectProjectsPostErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type CreateProjectProjectsPostError = CreateProjectProjectsPostErrors[keyof CreateProjectProjectsPostErrors];
+
+export type CreateProjectProjectsPostResponses = {
+    /**
+     * Successful Response
+     */
+    201: Project;
+};
+
+export type CreateProjectProjectsPostResponse = CreateProjectProjectsPostResponses[keyof CreateProjectProjectsPostResponses];
 
 export type RootGetData = {
     body?: never;
