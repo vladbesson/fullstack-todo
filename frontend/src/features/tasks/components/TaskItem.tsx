@@ -1,6 +1,6 @@
 import { type FC, useState } from "react"
 import { HugeiconsIcon } from "@hugeicons/react"
-import { Folder01Icon } from "@hugeicons/core-free-icons"
+import { Delete02Icon, Folder01Icon } from "@hugeicons/core-free-icons"
 import { type Task } from "@/api/generated/types.gen"
 import { Button } from "@/components/ui"
 
@@ -60,11 +60,12 @@ export const TaskItem: FC<TaskItemProps> = (props) => {
   }
 
   return (
-    <li className="flex min-h-16 items-center gap-3 px-4 py-4 sm:px-5">
+    <li className="flex min-h-18 items-center gap-2 py-3 sm:gap-3">
       <Button
         type="button"
         variant="ghost"
         size="icon"
+        className="size-11 rounded-full"
         disabled={isPending}
         onClick={onClickHandler}
         aria-pressed={task.completed}
@@ -96,10 +97,12 @@ export const TaskItem: FC<TaskItemProps> = (props) => {
         </span>
       </Button>
 
-      <div className="min-w-0 flex-1 text-sm leading-6 wrap-anywhere">
+      <div className="min-w-0 flex-1 text-base leading-6 wrap-anywhere">
         <p
           className={
-            task.completed ? "text-muted-foreground line-through" : undefined
+            task.completed
+              ? "text-muted-foreground line-through"
+              : "font-medium"
           }
         >
           {task.title}
@@ -127,11 +130,19 @@ export const TaskItem: FC<TaskItemProps> = (props) => {
       <Button
         type="button"
         variant="ghost"
+        size="icon"
+        className="size-11 rounded-lg text-muted-foreground/70 hover:text-destructive focus-visible:text-destructive"
         disabled={isPending}
         onClick={onDeleteHandler}
         aria-label={`Delete "${task.title}"`}
+        title={`Delete "${task.title}"`}
       >
-        Delete
+        <HugeiconsIcon
+          icon={Delete02Icon}
+          size={18}
+          strokeWidth={1.5}
+          aria-hidden="true"
+        />
       </Button>
     </li>
   )

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
-import type { Project } from "@/api/generated/types.gen"
-import { getProjects } from "./api"
+import type { Project, ProjectCreate } from "@/api/generated/types.gen"
+import { createProject, getProjects } from "./api"
 
 export const useProjects = () => {
   const [projects, setProjects] = useState<Project[] | null>(null)
@@ -39,5 +39,13 @@ export const useProjects = () => {
     setRequestId((current) => current + 1)
   }
 
-  return { projects, error, retry }
+  const addProject = async (payload: ProjectCreate): Promise<Project> => {
+    const created = await createProject(payload)
+
+    setProjects((current) => [...(current ?? []), created])
+
+    return created
+  }
+
+  return { projects, error, retry, addProject }
 }

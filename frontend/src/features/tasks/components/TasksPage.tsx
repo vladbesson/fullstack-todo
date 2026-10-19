@@ -7,23 +7,21 @@ import { TaskList } from "./TaskList"
 
 export const TasksPage: FC = () => {
   const { tasks, error, addTask, setTaskCompleted, removeTask } = useTasks()
-  const { projects, error: projectsError, retry } = useProjects()
+  const { projects, error: projectsError, retry, addProject } = useProjects()
+  const completedCount = tasks?.filter((task) => task.completed).length ?? 0
+  const openCount = (tasks?.length ?? 0) - completedCount
 
   return (
-    <main className="mx-auto w-full max-w-3xl flex-1 space-y-10 px-5 py-10 sm:px-8 sm:py-20">
-      <header className="flex items-start justify-between gap-4">
-        <div className="space-y-2">
-          <h1 className="text-3xl font-semibold tracking-tight">Tasks</h1>
-          <p className="text-sm text-muted-foreground sm:text-base">
-            Keep your next steps in one place.
-          </p>
-        </div>
-
-        {tasks !== null ? (
-          <span className="mt-1 shrink-0 rounded-full border bg-background px-3 py-1 text-xs font-medium text-muted-foreground tabular-nums">
-            {tasks.length} {tasks.length === 1 ? "task" : "tasks"}
-          </span>
-        ) : null}
+    <main className="mx-auto w-full max-w-3xl flex-1 space-y-7 px-5 py-10 sm:space-y-8 sm:px-8 sm:py-14">
+      <header className="space-y-2">
+        <h1 className="text-3xl font-semibold tracking-tight sm:text-4xl">
+          Tasks
+        </h1>
+        <p className="text-sm text-muted-foreground tabular-nums">
+          {tasks === null
+            ? "One task at a time."
+            : `${openCount} open · ${completedCount} completed`}
+        </p>
       </header>
 
       {error !== null ? (
@@ -39,14 +37,13 @@ export const TasksPage: FC = () => {
           <p role="status" className="sr-only">
             Loading tasks…
           </p>
-          <div aria-hidden="true" className="space-y-8">
+          <div aria-hidden="true" className="space-y-6">
             <div className="space-y-2">
-              <Skeleton className="h-4 w-20 motion-reduce:animate-none" />
-              <Skeleton className="h-11 w-full rounded-lg motion-reduce:animate-none" />
+              <Skeleton className="h-12 w-full rounded-lg motion-reduce:animate-none" />
+              <Skeleton className="h-11 w-60 max-w-full rounded-lg motion-reduce:animate-none" />
             </div>
             <div className="space-y-4">
-              <Skeleton className="h-5 w-24 motion-reduce:animate-none" />
-              <div className="divide-y overflow-hidden rounded-xl border bg-card">
+              <div className="divide-y border-y">
                 {[0, 1, 2].map((row) => (
                   <div
                     key={row}
@@ -61,9 +58,10 @@ export const TasksPage: FC = () => {
           </div>
         </section>
       ) : (
-        <div className="space-y-10">
+        <div className="space-y-6">
           <TaskCreateForm
             onCreate={addTask}
+            onCreateProject={addProject}
             projects={projects}
             projectsError={projectsError}
             onRetryProjects={retry}
