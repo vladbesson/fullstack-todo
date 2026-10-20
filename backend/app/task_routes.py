@@ -4,9 +4,9 @@ from fastapi import APIRouter, HTTPException, Path, Query, Response
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from dependencies import SessionDep
-from models import ProjectModel, TaskModel
-from schemas import Task, TaskCreate, TaskUpdate
+from app.dependencies import SessionDep
+from app.models import ProjectModel, TaskModel
+from app.schemas import Task, TaskCreate, TaskUpdate
 
 TaskId = Annotated[int, Path(ge=1, le=9_223_372_036_854_775_807)]
 

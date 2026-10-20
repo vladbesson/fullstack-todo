@@ -8,8 +8,8 @@ from sqlalchemy.ext.asyncio import (
     create_async_engine,
 )
 
-from db import database_url, get_session
-from main import app
+from app.db import database_url, get_session
+from app.main import app
 
 
 @pytest.fixture

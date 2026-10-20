@@ -16,6 +16,8 @@ The API and interface support creating, viewing, completing, reopening, and dele
 
 Create projects from the task form and assign tasks to them, or leave tasks without a project. Use the project filter above the list to switch between all tasks and a single project. The API supports the same filter through `GET /tasks?project_id=<id>`.
 
+Backend application code lives in `backend/app/`, with the FastAPI entry point in `app/main.py`. Tests and Alembic migrations live in `backend/tests/` and `backend/migrations/`.
+
 ## Getting started
 
 You need Python, uv, Node.js, pnpm, and a running Docker engine with Docker Compose. Run all commands from the repository root.

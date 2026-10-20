@@ -4,10 +4,10 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from config import settings
-from db import engine
-from project_routes import router as projects_router
-from task_routes import router as tasks_router
+from app.config import settings
+from app.db import engine
+from app.project_routes import router as projects_router
+from app.task_routes import router as tasks_router
 
 
 @asynccontextmanager

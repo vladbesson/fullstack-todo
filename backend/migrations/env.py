@@ -4,8 +4,8 @@ from logging.config import fileConfig
 from alembic import context
 from sqlalchemy.engine import Connection
 
-from db import database_url, engine
-from models import Base
+from app.db import database_url, engine
+from app.models import Base
 
 config = context.config
 

@@ -2,7 +2,7 @@
   "name": "fullstack-todo",
   "private": true,
   "scripts": {
-    "dev:backend": "uv run --directory backend fastapi dev main.py",
+    "dev:backend": "uv run --directory backend fastapi dev app/main.py",
     "dev:frontend": "pnpm --dir frontend dev",
     "check": "pnpm format:backend && pnpm format:frontend && uv run --project backend --locked pre-commit run --all-files && pnpm build",
     "build": "pnpm --dir frontend build",
