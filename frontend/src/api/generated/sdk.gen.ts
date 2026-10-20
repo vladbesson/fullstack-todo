@@ -2,7 +2,7 @@
 
 import type { Client, ClientMeta, Options as Options2, RequestResult, TDataShape } from './client';
 import { client } from './client.gen';
-import type { CreateProjectProjectsPostData, CreateProjectProjectsPostErrors, CreateProjectProjectsPostResponses, CreateTaskTasksPostData, CreateTaskTasksPostErrors, CreateTaskTasksPostResponses, DeleteTaskTasksTaskIdDeleteData, DeleteTaskTasksTaskIdDeleteErrors, DeleteTaskTasksTaskIdDeleteResponses, GetProjectsProjectsGetData, GetProjectsProjectsGetResponses, GetTasksTasksGetData, GetTasksTasksGetResponses, GetTaskTasksTaskIdGetData, GetTaskTasksTaskIdGetErrors, GetTaskTasksTaskIdGetResponses, RootGetData, RootGetResponses, UpdateTaskTasksTaskIdPatchData, UpdateTaskTasksTaskIdPatchErrors, UpdateTaskTasksTaskIdPatchResponses } from './types.gen';
+import type { CreateProjectProjectsPostData, CreateProjectProjectsPostErrors, CreateProjectProjectsPostResponses, CreateTaskTasksPostData, CreateTaskTasksPostErrors, CreateTaskTasksPostResponses, DeleteTaskTasksTaskIdDeleteData, DeleteTaskTasksTaskIdDeleteErrors, DeleteTaskTasksTaskIdDeleteResponses, GetProjectsProjectsGetData, GetProjectsProjectsGetResponses, GetTasksTasksGetData, GetTasksTasksGetErrors, GetTasksTasksGetResponses, GetTaskTasksTaskIdGetData, GetTaskTasksTaskIdGetErrors, GetTaskTasksTaskIdGetResponses, RootGetData, RootGetResponses, UpdateTaskTasksTaskIdPatchData, UpdateTaskTasksTaskIdPatchErrors, UpdateTaskTasksTaskIdPatchResponses } from './types.gen';
 
 export type Options<TData extends TDataShape = TDataShape, ThrowOnError extends boolean = boolean, TResponse = unknown> = Options2<TData, ThrowOnError, TResponse> & {
     /**
@@ -21,7 +21,7 @@ export type Options<TData extends TDataShape = TDataShape, ThrowOnError extends 
 /**
  * Get Tasks
  */
-export const getTasksTasksGet = <ThrowOnError extends boolean = false>(options?: Options<GetTasksTasksGetData, ThrowOnError>): RequestResult<GetTasksTasksGetResponses, unknown, ThrowOnError> => (options?.client ?? client).get<GetTasksTasksGetResponses, unknown, ThrowOnError>({ url: '/tasks', ...options });
+export const getTasksTasksGet = <ThrowOnError extends boolean = false>(options?: Options<GetTasksTasksGetData, ThrowOnError>): RequestResult<GetTasksTasksGetResponses, GetTasksTasksGetErrors, ThrowOnError> => (options?.client ?? client).get<GetTasksTasksGetResponses, GetTasksTasksGetErrors, ThrowOnError>({ url: '/tasks', ...options });
 
 /**
  * Create Task

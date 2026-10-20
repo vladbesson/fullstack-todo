@@ -115,9 +115,23 @@ export type ValidationError = {
 export type GetTasksTasksGetData = {
     body?: never;
     path?: never;
-    query?: never;
+    query?: {
+        /**
+         * Project Id
+         */
+        project_id?: number | null;
+    };
     url: '/tasks';
 };
+
+export type GetTasksTasksGetErrors = {
+    /**
+     * Validation Error
+     */
+    422: HttpValidationError;
+};
+
+export type GetTasksTasksGetError = GetTasksTasksGetErrors[keyof GetTasksTasksGetErrors];
 
 export type GetTasksTasksGetResponses = {
     /**

@@ -25,6 +25,7 @@ type TaskCreateFormProps = {
   projects: Project[] | null
   projectsError: string | null
   onRetryProjects: () => void
+  disabled: boolean
 }
 
 export const TaskCreateForm: FC<TaskCreateFormProps> = (props) => {
@@ -34,6 +35,7 @@ export const TaskCreateForm: FC<TaskCreateFormProps> = (props) => {
     projects,
     projectsError,
     onRetryProjects,
+    disabled,
   } = props
 
   const [title, setTitle] = useState<string>("")
@@ -54,7 +56,7 @@ export const TaskCreateForm: FC<TaskCreateFormProps> = (props) => {
     async (event: SubmitEvent<HTMLFormElement>) => {
       event.preventDefault()
 
-      if (isCreating || title.trim() === "") {
+      if (disabled || isCreating || title.trim() === "") {
         return
       }
 
@@ -77,7 +79,7 @@ export const TaskCreateForm: FC<TaskCreateFormProps> = (props) => {
         setIsCreating(false)
       }
     },
-    [title, projectId, isCreating, onCreate]
+    [title, projectId, disabled, isCreating, onCreate]
   )
 
   return (
@@ -108,7 +110,7 @@ export const TaskCreateForm: FC<TaskCreateFormProps> = (props) => {
           <Button
             type="submit"
             className="h-12 rounded-lg px-4 sm:px-5"
-            disabled={isCreating || title.trim() === ""}
+            disabled={disabled || isCreating || title.trim() === ""}
           >
             {isCreating ? "Adding…" : "Add task"}
           </Button>

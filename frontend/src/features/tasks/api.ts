@@ -7,9 +7,14 @@ import {
   updateTaskTasksTaskIdPatch,
 } from "@/api/generated/sdk.gen"
 
-export const getTasks = async (): Promise<Task[]> => {
+export const getTasks = async (
+  projectId?: number,
+  signal?: AbortSignal
+): Promise<Task[]> => {
   const { data } = await getTasksTasksGet({
     client,
+    query: projectId === undefined ? undefined : { project_id: projectId },
+    signal,
     throwOnError: true,
   })
 

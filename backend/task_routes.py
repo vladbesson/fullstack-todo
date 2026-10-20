@@ -1,6 +1,6 @@
 from typing import Annotated
 
-from fastapi import APIRouter, HTTPException, Path, Response
+from fastapi import APIRouter, HTTPException, Path, Query, Response
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -24,8 +24,18 @@ async def get_task_or_404(
 
 
 @router.get("", response_model=list[Task])
-async def get_tasks(session: SessionDep) -> list[TaskModel]:
+async def get_tasks(
+    session: SessionDep,
+    project_id: Annotated[
+        int | None,
+        Query(ge=1, le=9_223_372_036_854_775_807),
+    ] = None,
+) -> list[TaskModel]:
     statement = select(TaskModel).order_by(TaskModel.id)
+
+    if project_id is not None:
+        statement = statement.where(TaskModel.project_id == project_id)
+
     result = await session.scalars(statement)
     return list(result.all())
 

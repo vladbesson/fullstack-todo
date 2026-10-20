@@ -1,13 +1,36 @@
 import type { FC } from "react"
-import { Alert, AlertDescription, AlertTitle, Skeleton } from "@/components/ui"
+import {
+  Alert,
+  AlertDescription,
+  AlertTitle,
+  Button,
+  Skeleton,
+} from "@/components/ui"
 import { useProjects } from "@/features/projects/useProjects"
 import { useTasks } from "../useTasks"
 import { TaskCreateForm } from "./TaskCreateForm"
 import { TaskList } from "./TaskList"
+import { TaskProjectFilter } from "./TaskProjectFilter"
 
 export const TasksPage: FC = () => {
-  const { tasks, error, addTask, setTaskCompleted, removeTask } = useTasks()
-  const { projects, error: projectsError, retry, addProject } = useProjects()
+  const {
+    tasks,
+    error,
+    projectId,
+    setProjectFilter,
+    retry: retryTasks,
+    isMutating,
+    hasHiddenCreatedTask,
+    addTask,
+    setTaskCompleted,
+    removeTask,
+  } = useTasks()
+  const {
+    projects,
+    error: projectsError,
+    retry: retryProjects,
+    addProject,
+  } = useProjects()
   const completedCount = tasks?.filter((task) => task.completed).length ?? 0
   const openCount = (tasks?.length ?? 0) - completedCount
 
@@ -24,25 +47,61 @@ export const TasksPage: FC = () => {
         </p>
       </header>
 
-      {error !== null ? (
-        <Alert variant="destructive">
-          <AlertTitle>Unable to load tasks</AlertTitle>
-          <AlertDescription>
-            <p>{error}</p>
-            <p>Refresh the page to try again.</p>
-          </AlertDescription>
-        </Alert>
-      ) : tasks === null ? (
-        <section aria-busy="true" aria-label="Task list">
-          <p role="status" className="sr-only">
-            Loading tasks…
-          </p>
-          <div aria-hidden="true" className="space-y-6">
-            <div className="space-y-2">
-              <Skeleton className="h-12 w-full rounded-lg motion-reduce:animate-none" />
-              <Skeleton className="h-11 w-60 max-w-full rounded-lg motion-reduce:animate-none" />
-            </div>
-            <div className="space-y-4">
+      <TaskCreateForm
+        onCreate={addTask}
+        onCreateProject={addProject}
+        projects={projects}
+        projectsError={projectsError}
+        onRetryProjects={retryProjects}
+        disabled={tasks === null}
+      />
+
+      <div className="space-y-4">
+        <TaskProjectFilter
+          projects={projects}
+          projectId={projectId}
+          disabled={isMutating}
+          onChange={setProjectFilter}
+        />
+
+        {hasHiddenCreatedTask ? (
+          <div
+            role="status"
+            className="flex flex-wrap items-center gap-x-2 text-sm text-muted-foreground"
+          >
+            <p>Task added outside this view.</p>
+            <Button
+              type="button"
+              variant="link"
+              className="min-h-11 px-1"
+              onClick={() => setProjectFilter(undefined)}
+            >
+              Show all tasks
+            </Button>
+          </div>
+        ) : null}
+
+        {error !== null ? (
+          <Alert variant="destructive">
+            <AlertTitle>Unable to load tasks</AlertTitle>
+            <AlertDescription>
+              <p>{error}</p>
+              <Button
+                type="button"
+                variant="outline"
+                className="mt-2 min-h-11"
+                onClick={retryTasks}
+              >
+                Try again
+              </Button>
+            </AlertDescription>
+          </Alert>
+        ) : tasks === null ? (
+          <section aria-busy="true" aria-label="Task list">
+            <p role="status" className="sr-only">
+              Loading tasks…
+            </p>
+            <div aria-hidden="true">
               <div className="divide-y border-y">
                 {[0, 1, 2].map((row) => (
                   <div
@@ -55,25 +114,17 @@ export const TasksPage: FC = () => {
                 ))}
               </div>
             </div>
-          </div>
-        </section>
-      ) : (
-        <div className="space-y-6">
-          <TaskCreateForm
-            onCreate={addTask}
-            onCreateProject={addProject}
-            projects={projects}
-            projectsError={projectsError}
-            onRetryProjects={retry}
-          />
+          </section>
+        ) : (
           <TaskList
             tasks={tasks}
             projects={projects}
+            isFiltered={projectId !== undefined}
             onCompletedChange={setTaskCompleted}
             onDelete={removeTask}
           />
-        </div>
-      )}
+        )}
+      </div>
     </main>
   )
 }

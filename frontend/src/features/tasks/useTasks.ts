@@ -1,17 +1,22 @@
 import { useEffect, useState } from "react"
-import { type Task, type TaskCreate } from "@/api/generated/types.gen"
+import type { Task, TaskCreate } from "@/api/generated/types.gen"
 import { getTasks, createTask, updateTask, deleteTask } from "./api"
 
 export const useTasks = () => {
   const [tasks, setTasks] = useState<Task[] | null>(null)
   const [error, setError] = useState<string | null>(null)
+  const [projectId, setProjectId] = useState<number | undefined>(undefined)
+  const [requestId, setRequestId] = useState(0)
+  const [pendingMutations, setPendingMutations] = useState(0)
+  const [hasHiddenCreatedTask, setHasHiddenCreatedTask] = useState(false)
 
   useEffect(() => {
     let ignore = false
+    const controller = new AbortController()
 
     async function loadTasks() {
       try {
-        const data = await getTasks()
+        const data = await getTasks(projectId, controller.signal)
 
         if (!ignore) {
           setTasks(data)
@@ -31,39 +36,81 @@ export const useTasks = () => {
 
     return () => {
       ignore = true
+      controller.abort()
     }
-  }, [])
+  }, [projectId, requestId])
 
-  const addTask = async (payload: TaskCreate): Promise<void> => {
-    const created = await createTask(payload)
+  const setProjectFilter = (nextProjectId: number | undefined) => {
+    if (pendingMutations > 0 || nextProjectId === projectId) {
+      return
+    }
 
-    setTasks((current) => [...(current ?? []), created])
+    setTasks(null)
+    setError(null)
+    setHasHiddenCreatedTask(false)
+    setProjectId(nextProjectId)
   }
 
-  const setTaskCompleted = async (
+  const retry = () => {
+    setTasks(null)
+    setError(null)
+    setRequestId((current) => current + 1)
+  }
+
+  const runMutation = async (operation: () => Promise<void>): Promise<void> => {
+    setPendingMutations((current) => current + 1)
+
+    try {
+      await operation()
+    } finally {
+      setPendingMutations((current) => current - 1)
+    }
+  }
+
+  const addTask = (payload: TaskCreate): Promise<void> =>
+    runMutation(async () => {
+      setHasHiddenCreatedTask(false)
+      const created = await createTask(payload)
+
+      if (projectId !== undefined && created.project_id !== projectId) {
+        setHasHiddenCreatedTask(true)
+        return
+      }
+
+      setTasks((current) => (current === null ? null : [...current, created]))
+    })
+
+  const setTaskCompleted = (
     taskId: number,
     completed: boolean
-  ): Promise<void> => {
-    const updated = await updateTask(taskId, { completed })
+  ): Promise<void> =>
+    runMutation(async () => {
+      const updated = await updateTask(taskId, { completed })
 
-    setTasks((current) =>
-      current === null
-        ? null
-        : current.map((task) => (task.id === updated.id ? updated : task))
-    )
-  }
+      setTasks((current) =>
+        current === null
+          ? null
+          : current.map((task) => (task.id === updated.id ? updated : task))
+      )
+    })
 
-  const removeTask = async (taskId: number): Promise<void> => {
-    await deleteTask(taskId)
+  const removeTask = (taskId: number): Promise<void> =>
+    runMutation(async () => {
+      await deleteTask(taskId)
 
-    setTasks((current) =>
-      current === null ? null : current.filter((task) => task.id !== taskId)
-    )
-  }
+      setTasks((current) =>
+        current === null ? null : current.filter((task) => task.id !== taskId)
+      )
+    })
 
   return {
     tasks,
     error,
+    projectId,
+    setProjectFilter,
+    retry,
+    isMutating: pendingMutations > 0,
+    hasHiddenCreatedTask,
     addTask,
     setTaskCompleted,
     removeTask,

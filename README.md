@@ -14,6 +14,8 @@ A learning project for exploring Python backend development and its integration 
 
 The API and interface support creating, viewing, completing, reopening, and deleting tasks. Data is stored in PostgreSQL and persists across backend restarts. Task actions show errors and are disabled while a request is in progress.
 
+Create projects from the task form and assign tasks to them, or leave tasks without a project. Use the project filter above the list to switch between all tasks and a single project. The API supports the same filter through `GET /tasks?project_id=<id>`.
+
 ## Getting started
 
 You need Python, uv, Node.js, pnpm, and a running Docker engine with Docker Compose. Run all commands from the repository root.
