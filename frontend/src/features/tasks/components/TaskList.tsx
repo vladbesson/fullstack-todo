@@ -16,6 +16,10 @@ export const TaskList: FC<TaskListProps> = (props) => {
     (projects ?? []).map((project) => [project.id, project.name])
   )
 
+  const sortedTasks = [...tasks].sort(
+    (a, b) => Number(a.completed) - Number(b.completed)
+  )
+
   return (
     <section aria-labelledby="task-list-heading" className="space-y-4">
       <h2 id="task-list-heading" className="sr-only">
@@ -35,7 +39,7 @@ export const TaskList: FC<TaskListProps> = (props) => {
         </div>
       ) : (
         <ul className="divide-y border-y">
-          {tasks.map((task) => (
+          {sortedTasks.map((task) => (
             <TaskItem
               key={task.id}
               task={task}
